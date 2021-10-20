@@ -17,6 +17,7 @@ public abstract class GenericRestController<Model, ModelDto> {
 
     @Autowired
     GenericService<Model> service = null;
+    @Autowired
     GenericMapper<Model, ModelDto> mapper = null;
 
     @GetMapping()

@@ -1,11 +1,11 @@
-###### Book-manager - restful CRUD example
+**Book-manager - restful CRUD example**
 
 Spring Boot  
 Spring WebMvc  
 Spring Data JPA
-Mapstruct
-H2 db
-Lombok
+Mapstruct               
+H2 db               
+Lombok              
 Swagger
 
 ****API documentation:****
