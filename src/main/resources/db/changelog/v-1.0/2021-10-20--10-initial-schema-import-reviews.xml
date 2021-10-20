@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd
+      http://www.liquibase.org/xml/ns/pro
+      http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd">
+
+
+
+    <property name="uuid_type" value="uuid" dbms="postgresql"/>
+    <property name="uuid_type" value="uniqueidentifier" dbms="mssql"/>
+    <property name="uuid_type" value="RAW(16)" dbms="oracle"/>
+
+    <property name="uuid_function" value="uid.uuid_generate_v4()" dbms="postgresql"/>
+    <property name="uuid_function" value="NEWID()" dbms="mssql"/>
+    <property name="uuid_function" value="sys_guid()" dbms="oracle"/>
+
+    <preConditions>
+        <dbms type="postgresql"/>
+    </preConditions>
+
+    <changeSet id="create-reviews-table" author="Alexander Reztsov">
+        <createTable tableName="REVIEWS">
+            <column name="id" type="${uuid_type}" generationType="${uuid_function}">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="isbn" type="varchar(255)">
+                <constraints nullable="false" foreignKeyName="fk_reviews_isbn_books" references="books(isbn)"/>
+            </column>
+
+            <column name="body" type="varchar(1024)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="grade" type="int" >
+                <constraints />
+            </column>
+
+            <column name="version" type="int">
+            </column>
+
+            <column name="book_id" type="${uuid_type}" generationType="${uuid_function}">
+                <constraints nullable="false" foreignKeyName="fk_reviews_book_id_books" references="books(id)"/>
+            </column>
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="reviews"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
+

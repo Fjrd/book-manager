@@ -6,7 +6,8 @@ Spring Data JPA
 Mapstruct               
 H2 db               
 Lombok              
-Swagger
+Swagger                         
+Liquibase
 
 ****API documentation:****                  
 http://localhost:8080/swagger-ui.html

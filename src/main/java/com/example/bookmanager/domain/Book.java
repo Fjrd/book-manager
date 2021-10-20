@@ -26,6 +26,8 @@ public class Book {
 
     @Column(unique = true, nullable = false)
     String isbn;
+
+    @Column(nullable = false)
     String title;
     String description;
     String author;

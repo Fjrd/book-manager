@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd
+      http://www.liquibase.org/xml/ns/pro
+      http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd">
+
+
+
+    <property name="uuid_type" value="uuid" dbms="postgresql"/>
+    <property name="uuid_type" value="uniqueidentifier" dbms="mssql"/>
+    <property name="uuid_type" value="RAW(16)" dbms="oracle"/>
+
+    <property name="uuid_function" value="uid.uuid_generate_v4()" dbms="postgresql"/>
+    <property name="uuid_function" value="NEWID()" dbms="mssql"/>
+    <property name="uuid_function" value="sys_guid()" dbms="oracle"/>
+
+    <preConditions>
+        <dbms type="postgresql"/>
+    </preConditions>
+
+    <changeSet id="create-indexes" author="Alexander Reztsov">
+        <createIndex tableName="BOOKS" indexName="ix_books_id">
+            <column name="id" type="${uuid_type}"/>
+        </createIndex>
+
+        <createIndex tableName="BOOKS" indexName="ix_books_author">
+            <column name="author" type="varchar(255)"/>
+        </createIndex>
+
+        <createIndex tableName="BOOKS" indexName="ix_books_isbn">
+            <column name="isbn" type="varchar(255)"/>
+        </createIndex>
+
+        <createIndex tableName="REVIEWS" indexName="ix_review_id">
+            <column name="id" type="${uuid_type}"/>
+        </createIndex>
+
+        <rollback>
+            <dropIndex tableName="BOOKS" indexName="ix_books_id"/>
+            <dropIndex tableName="BOOKS" indexName="ix_books_author"/>
+            <dropIndex tableName="BOOKS" indexName="ix_books_isbn"/>
+            <dropIndex tableName="REVIEWS" indexName="ix_review_id"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
+

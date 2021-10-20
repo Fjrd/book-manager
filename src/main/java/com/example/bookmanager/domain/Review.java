@@ -4,6 +4,8 @@ import lombok.*;
 import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.UUID;
 
 @Setter(AccessLevel.PRIVATE)
@@ -24,9 +26,11 @@ public class Review {
     @Column(nullable = false)
     String isbn;
 
-    @Lob
+    @Column(nullable = false)
     String body;
 
+    @Min(0)
+    @Max(10)
     Integer grade;
 
     @Version
