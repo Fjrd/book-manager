@@ -6,8 +6,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
-public interface BookMapper {
+public interface BookMapper extends GenericMapper<Book, BookDto>{
     BookMapper INSTANCE = Mappers.getMapper(BookMapper.class);
-    BookDto modelToDto(Book model);
-    Book dtoToModel(BookDto dto);
 }

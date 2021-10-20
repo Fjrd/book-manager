@@ -1,5 +1,6 @@
 package com.example.bookmanager.controller;
 
+import com.example.bookmanager.mapper.GenericMapper;
 import com.example.bookmanager.service.GenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -10,21 +11,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
-public abstract class GenericRestController<T> {
+public abstract class GenericRestController<Model, ModelDto> {
 
     @Autowired
-    GenericService<T> service = null;
-
+    GenericService<Model> service = null;
+    GenericMapper<Model, ModelDto> mapper = null;
 
     @GetMapping()
-    public @ResponseBody List<T> allUsers(){
-        return service.findAll();
+    public @ResponseBody List<ModelDto> getAll(){
+        List<Model> models = service.findAll();
+        return models.stream()
+                .map(model -> mapper.modelToDto(model))
+                .collect(Collectors.toList());
     }
 
     @PostMapping
-    public @ResponseBody Map<String, Object> create(@RequestBody @Valid T json) {
-        T created = service.save(json);
+    public @ResponseBody Map<String, Object> create(@RequestBody @Valid ModelDto json) {
+        Model created = service.save(mapper.dtoToModel(json));
 
         Map<String, Object> m = new HashMap<>();
         m.put("success", true);
@@ -33,20 +38,21 @@ public abstract class GenericRestController<T> {
     }
 
     @GetMapping("{id}")
-    public @ResponseBody T get(@PathVariable UUID id) {
-        return service.findById(id);
+    public @ResponseBody
+    ModelDto getOne(@PathVariable UUID id) {
+        return mapper.modelToDto(service.findById(id));
     }
 
     @PutMapping("{id}")
-    public @ResponseBody Map<String, Object> update(@PathVariable UUID id, @RequestBody T json) {
+    public @ResponseBody Map<String, Object> update(@PathVariable UUID id, @RequestBody ModelDto json) {
 
         Map<String, Object> m = new HashMap<>();
 
         try{
-            T entity = service.update(id, json);
+            Model entity = service.update(id, mapper.dtoToModel(json));
             m.put("success", true);
             m.put("id", id);
-            m.put("updated", entity);
+            m.put("updated", mapper.modelToDto(entity));
             return m;
         }
         catch (ResourceNotFoundException ex){
