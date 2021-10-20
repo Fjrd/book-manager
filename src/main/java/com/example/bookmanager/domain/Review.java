@@ -1,6 +1,7 @@
 package com.example.bookmanager.domain;
 
 import lombok.*;
+import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -11,6 +12,7 @@ import java.util.UUID;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Validated
 @Entity
 @Table(name = "REVIEWS")
 public class Review {

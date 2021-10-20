@@ -45,7 +45,7 @@ public abstract class GenericRestController<Model, ModelDto> {
     }
 
     @PutMapping("{id}")
-    public @ResponseBody Map<String, Object> update(@PathVariable UUID id, @RequestBody ModelDto json) {
+    public @ResponseBody Map<String, Object> update(@PathVariable UUID id, @RequestBody @Valid ModelDto json) {
 
         Map<String, Object> m = new HashMap<>();
 
