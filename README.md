@@ -1,10 +1,10 @@
-**Book-manager - restful CRUD example**
+**Book-manager - restful CRUD service**
 
 Spring Boot  
 Spring WebMvc  
 Spring Data JPA
+PostgreSQL on Heroku               
 Mapstruct               
-H2 db               
 Lombok              
 Swagger                         
 Liquibase
@@ -22,5 +22,7 @@ http://localhost:8080/swagger-ui.html
 1. Предложить структуры БД, с индексами, с возможными ссылками между сущностями
 2. Создание  реста (spring boot) получающего данные по jpa для книг + отзывов"
 
-TODO:
-Liquibase
+by Reztsov Alexander
+
+![db_schema](src/main/resources/image/db_schema.png)
+![db_indexes](src/main/resources/image/db.png)
