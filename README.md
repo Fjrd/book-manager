@@ -26,3 +26,4 @@ by Reztsov Alexander
 
 ![db_schema](src/main/resources/image/db_schema.png)
 ![db_indexes](src/main/resources/image/db.png)
+![swagger](src/main/resources/image/swagger.png)
