@@ -14,8 +14,8 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
-    GenericService<Book> bookService;
-    GenericService<Review> reviewService;
+    private final GenericService<Book> bookService;
+    private final GenericService<Review> reviewService;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {

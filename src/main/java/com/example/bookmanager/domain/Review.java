@@ -1,6 +1,7 @@
 package com.example.bookmanager.domain;
 
 import lombok.*;
+import lombok.EqualsAndHashCode.Include;
 import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.*;
@@ -8,10 +9,11 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.UUID;
 
-@Setter(AccessLevel.PRIVATE)
 @Getter
+@Setter(AccessLevel.PRIVATE)
 @Builder(toBuilder = true)
-@ToString
+@ToString(doNotUseGetters = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, doNotUseGetters = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Validated
@@ -21,21 +23,22 @@ public class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    UUID id;
+    @Include
+    private UUID id;
 
     @Column(nullable = false)
-    String isbn;
+    private String isbn;
 
     @Column(nullable = false)
-    String body;
+    private String body;
 
     @Min(0)
     @Max(10)
-    Integer grade;
+    private Integer grade;
 
     @Version
-    Integer version;
+    private Integer version;
 
     @ManyToOne
-    Book book;
+    private Book book;
 }

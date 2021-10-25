@@ -7,7 +7,7 @@ import java.io.Serializable;
 @Data
 public class ReviewDto implements Serializable {
 
-    String body;
-    Integer grade;
-    String bookIsbn;
+    private String body;
+    private Integer grade;
+    private String bookIsbn;
 }

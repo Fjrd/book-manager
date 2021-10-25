@@ -2,7 +2,7 @@ package com.example.bookmanager.controller;
 
 import com.example.bookmanager.mapper.GenericMapper;
 import com.example.bookmanager.service.GenericService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,12 +13,11 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 public abstract class GenericRestController<Model, ModelDto> {
 
-    @Autowired
-    GenericService<Model> service = null;
-    @Autowired
-    GenericMapper<Model, ModelDto> mapper = null;
+    private final GenericService<Model> service;
+    private final GenericMapper<Model, ModelDto> mapper;
 
     @GetMapping()
     public @ResponseBody List<ModelDto> getAll(){

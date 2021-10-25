@@ -9,34 +9,35 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.UUID;
 
-@Setter(AccessLevel.PRIVATE)
+import static lombok.EqualsAndHashCode.*;
+
 @Getter
+@Setter(AccessLevel.PRIVATE)
 @Builder(toBuilder = true)
-@ToString
+@ToString(doNotUseGetters = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Validated
 @Entity
-@Table(name = "BOOKS")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, doNotUseGetters = true)
+@Table(name = "books")
 public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    UUID id;
+    @Include
+    private UUID id;
 
-    @Column(unique = true, nullable = false)
-    String isbn;
-
-    @Column(nullable = false)
-    String title;
-    String description;
-    String author;
+    private String isbn;
+    private String title;
+    private String description;
+    private String author;
 
     @Version
-    Integer version;
+    private Integer version;
 
     @ToString.Exclude
     @OneToMany(mappedBy = "book")
     @JsonBackReference
-    List<Review> reviews;
+    private List<Review> reviews;
 }

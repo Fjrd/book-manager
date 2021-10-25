@@ -7,8 +7,8 @@ import java.io.Serializable;
 @Data
 public class BookDto implements Serializable {
 
-    String isbn;
-    String title;
-    String description;
-    String author;
+    private String isbn;
+    private String title;
+    private String description;
+    private String author;
 }
