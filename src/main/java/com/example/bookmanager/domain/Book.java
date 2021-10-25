@@ -5,11 +5,10 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import org.springframework.validation.annotation.Validated;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.List;
-import java.util.UUID;
-
-import static lombok.EqualsAndHashCode.*;
 
 @Getter
 @Setter(AccessLevel.PRIVATE)
@@ -21,20 +20,12 @@ import static lombok.EqualsAndHashCode.*;
 @Entity
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, doNotUseGetters = true)
 @Table(name = "books")
-public class Book {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Include
-    private UUID id;
+public class Book extends BaseEntity {
 
     private String isbn;
     private String title;
     private String description;
     private String author;
-
-    @Version
-    private Integer version;
 
     @ToString.Exclude
     @OneToMany(mappedBy = "book")

@@ -1,13 +1,11 @@
 package com.example.bookmanager.domain;
 
 import lombok.*;
-import lombok.EqualsAndHashCode.Include;
 import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import java.util.UUID;
 
 @Getter
 @Setter(AccessLevel.PRIVATE)
@@ -19,12 +17,7 @@ import java.util.UUID;
 @Validated
 @Entity
 @Table(name = "REVIEWS")
-public class Review {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Include
-    private UUID id;
+public class Review extends BaseEntity{
 
     @Column(nullable = false)
     private String isbn;
@@ -35,9 +28,6 @@ public class Review {
     @Min(0)
     @Max(10)
     private Integer grade;
-
-    @Version
-    private Integer version;
 
     @ManyToOne
     private Book book;

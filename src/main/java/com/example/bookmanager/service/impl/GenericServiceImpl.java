@@ -1,14 +1,15 @@
 package com.example.bookmanager.service.impl;
 
+import com.example.bookmanager.domain.BaseEntity;
 import com.example.bookmanager.service.GenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
-public abstract class GenericServiceImpl<T> implements GenericService<T> {
+public abstract class GenericServiceImpl<T extends BaseEntity> implements GenericService<T> {
 
     @Autowired
     JpaRepository<T, UUID> repository = null;
@@ -24,24 +25,29 @@ public abstract class GenericServiceImpl<T> implements GenericService<T> {
     }
 
     @Override
-    public T findById(UUID id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(id.toString()));
+    public Optional<T> findById(UUID id) {
+        return repository.findById(id);
     }
 
     @Override
-    public void delete(T entity) {
-        repository.delete(entity);
+    public boolean deleteById(UUID id) {
+        if(repository.existsById(id)){
+            repository.deleteById(id);
+            return true;
+        }
+        else return false;
     }
 
     @Override
-    public void deleteById(UUID id) {
-        repository.deleteById(id);
-    }
-
-    @Override
-    public T update(UUID id, T entity) {
-        return repository.save(entity);
+    public Optional<T> update(UUID id, T entity) {
+        if(repository.existsById(id)){
+            entity.setId(id);
+            repository.save(entity);
+            return repository.findById(id);
+        }
+        else {
+            return Optional.empty();
+        }
     }
 
 }
