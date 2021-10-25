@@ -8,7 +8,7 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import java.util.List;
 import java.util.UUID;
 
-public class GenericServiceImpl<T> implements GenericService<T> {
+public abstract class GenericServiceImpl<T> implements GenericService<T> {
 
     @Autowired
     JpaRepository<T, UUID> repository = null;

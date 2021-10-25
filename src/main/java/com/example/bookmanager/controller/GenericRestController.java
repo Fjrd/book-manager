@@ -3,13 +3,12 @@ package com.example.bookmanager.controller;
 import com.example.bookmanager.mapper.GenericMapper;
 import com.example.bookmanager.service.GenericService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -20,63 +19,38 @@ public abstract class GenericRestController<Model, ModelDto> {
     private final GenericMapper<Model, ModelDto> mapper;
 
     @GetMapping()
-    public @ResponseBody List<ModelDto> getAll(){
+    public ResponseEntity<List<ModelDto>> getAll(){
         List<Model> models = service.findAll();
-        return models.stream()
-                .map(model -> mapper.modelToDto(model))
+        List<ModelDto> dtos = models.stream()
+                .map(mapper::modelToDto)
                 .collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
     }
 
     @PostMapping
-    public @ResponseBody Map<String, Object> create(@RequestBody @Valid ModelDto json) {
+    public ResponseEntity<ModelDto> create(@RequestBody @Valid ModelDto json) {
         Model created = service.save(mapper.dtoToModel(json));
-
-        Map<String, Object> m = new HashMap<>();
-        m.put("success", true);
-        m.put("created", created);
-        return m;
+        ModelDto dto = mapper.modelToDto(created);
+        return ResponseEntity.ok(dto);
     }
 
     @GetMapping("{id}")
-    public @ResponseBody
-    ModelDto getOne(@PathVariable UUID id) {
-        return mapper.modelToDto(service.findById(id));
+    public ResponseEntity<ModelDto> getOne(@PathVariable UUID id) {
+        Model model = service.findById(id);
+        ModelDto dto = mapper.modelToDto(model);
+        return ResponseEntity.ok(dto);
     }
 
     @PutMapping("{id}")
-    public @ResponseBody Map<String, Object> update(@PathVariable UUID id, @RequestBody @Valid ModelDto json) {
-
-        Map<String, Object> m = new HashMap<>();
-
-        try{
-            Model entity = service.update(id, mapper.dtoToModel(json));
-            m.put("success", true);
-            m.put("id", id);
-            m.put("updated", mapper.modelToDto(entity));
-            return m;
-        }
-        catch (ResourceNotFoundException ex){
-            m.put("success", false);
-            m.put("id", id);
-            return m;
-        }
+    public ResponseEntity<ModelDto> update(@PathVariable UUID id, @RequestBody @Valid ModelDto json) {
+        Model updated = service.update(id, mapper.dtoToModel(json));
+        ModelDto dto = mapper.modelToDto(updated);
+        return ResponseEntity.ok(dto);
     }
 
     @DeleteMapping("{id}")
-    public @ResponseBody Map<String, Object> deleteById(@PathVariable UUID id){
-
-        Map<String, Object> m = new HashMap<>();
-
-        try{
-            service.deleteById(id);
-            m.put("success", true);
-            m.put("id", id);
-            return m;
-        }
-        catch (ResourceNotFoundException ex){
-            m.put("success", false);
-            m.put("id", id);
-            return m;
-        }
+    public ResponseEntity<HttpStatus> deleteById(@PathVariable UUID id){
+        service.deleteById(id);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 }
